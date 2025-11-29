@@ -24,6 +24,10 @@ public class Incident{
     @Column(nullable = false)
     private IncidentStatus status;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private IncidentSeverity severity;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
