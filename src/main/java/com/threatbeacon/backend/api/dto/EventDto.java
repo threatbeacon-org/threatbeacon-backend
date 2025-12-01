@@ -1,86 +1,26 @@
 package com.threatbeacon.backend.api.dto;
 
-import java.time.OffsetDateTime;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+import lombok.Data;
 
+@Data
+@Builder
 public class EventDto {
 
-    private String type;
-    private String source;
-    private String ip;
-    private String country;
-    private String severity;
-    private OffsetDateTime timestamp;
-    private String metadata;
+    @NotBlank
+    private String type;      // LOGIN_FAILED, HTTP_ERROR, etc.
 
-    // Constructors
-    public EventDto() {
-    }
+    private String source;    // auth-service, firewall, etc.
 
-    public EventDto(String type, String source, String ip, String country,
-                    String severity, OffsetDateTime timestamp, String metadata) {
-        this.type = type;
-        this.source = source;
-        this.ip = ip;
-        this.country = country;
-        this.severity = severity;
-        this.timestamp = timestamp;
-        this.metadata = metadata;
-    }
+    @NotBlank(message = "IP is required")
+    private String ip;        // 192.168.1.50
 
-    // Getters and Setters
-    public String getType() {
-        return type;
-    }
+    private String country;   // CO, US, RU
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    @NotBlank(message = "Severity is required")
+    private String severity;  // LOW, MEDIUM, HIGH
 
-    public String getSource() {
-        return source;
-    }
+    private String metadata;  // "user=admin"
 
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getSeverity() {
-        return severity;
-    }
-
-    public void setSeverity(String severity) {
-        this.severity = severity;
-    }
-
-    public OffsetDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(String metadata) {
-        this.metadata = metadata;
-    }
 }

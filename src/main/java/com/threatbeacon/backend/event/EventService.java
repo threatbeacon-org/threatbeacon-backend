@@ -1,10 +1,13 @@
 package com.threatbeacon.backend.event;
 
 import com.threatbeacon.backend.api.dto.EventDto;
+import com.threatbeacon.backend.incident.IncidentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
 
 @Service
 public class EventService {
@@ -12,9 +15,11 @@ public class EventService {
     private static final Logger logger = LoggerFactory.getLogger(EventService.class);
 
     private final EventRepository eventRepository;
+    private final IncidentService incidentService;
 
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, IncidentService incidentService) {
         this.eventRepository = eventRepository;
+        this.incidentService = incidentService;
     }
 
     @Transactional
@@ -32,6 +37,11 @@ public class EventService {
 
         logger.info("Event saved successfully with ID: {}", savedEvent.getId());
 
+        try {
+            incidentService.proccesNewEvent(savedEvent);
+        } catch (Exception e) {
+            logger.error("Error processing incident rules fro event {}: {}", savedEvent.getId(), e.getMessage());
+        }
         return savedEvent;
     }
 
@@ -41,9 +51,6 @@ public class EventService {
         }
         if (dto.getSeverity() == null || dto.getSeverity().isBlank()) {
             throw new IllegalArgumentException("Severity cannot be null or empty");
-        }
-        if (dto.getTimestamp() == null) {
-            throw new IllegalArgumentException("Timestamp cannot be null");
         }
         if (dto.getSource() == null || dto.getSource().isBlank()) {
             throw new IllegalArgumentException("Source cannot be null or empty");
@@ -57,8 +64,10 @@ public class EventService {
         event.setIp(dto.getIp());
         event.setCountry(dto.getCountry());
         event.setSeverity(dto.getSeverity());
-        event.setTimestamp(dto.getTimestamp());
         event.setMetadata(dto.getMetadata());
+
+        event.getTimestamp(OffsetDateTime.now());
+
         return event;
     }
 }
