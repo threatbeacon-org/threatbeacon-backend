@@ -24,7 +24,7 @@ public class IncidentService {
      * Entry point: Analyzes the incoming event to see if it triggers an incident
      */
     @Transactional
-    public void proccesNewEnvent(Event event){
+    public void proccesNewEvent(Event event){
         log.debug("Analizando evento para posibles incidentes: type{}, ip{}", event.getType(), event.getIp());
 
         // Rule 1: Brute force detection

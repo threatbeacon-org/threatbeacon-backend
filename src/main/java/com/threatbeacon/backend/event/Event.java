@@ -96,7 +96,7 @@ public class Event {
         this.severity = severity;
     }
 
-    public OffsetDateTime getTimestamp() {
+    public OffsetDateTime getTimestamp(OffsetDateTime now) {
         return timestamp;
     }
 
