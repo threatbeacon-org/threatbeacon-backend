@@ -25,7 +25,7 @@ public class IncidentService {
      */
     @Transactional
     public void proccesNewEvent(Event event){
-        log.debug("Analizando evento para posibles incidentes: type{}, ip{}", event.getType(), event.getIp());
+        log.debug("Analyzing events to detect potential incidents: type{}, ip{}", event.getType(), event.getIp());
 
         // Rule 1: Brute force detection
         if ("LOGIN_FAILED".equals(event.getType())){
@@ -49,7 +49,7 @@ public class IncidentService {
             updateExistingIncident(existingIncident.get(), event);
         } else {
             // If it DOES NOT EXIST, we create one immediately
-            log.warn("DETECTADO INICIO DE FUERZA BRUTA - creando Incident. IP{}", event.getIp());
+            log.warn("BRUTE FORCE ATTACK DETECTED - creating Incident. IP{}", event.getIp());
             createIncident(IncidentType.BRUTE_FORCE_LOGIN, IncidentSeverity.HIGH, event);
         }
     }
@@ -61,7 +61,7 @@ public class IncidentService {
         if (existingIncident.isPresent()) {
             updateExistingIncident(existingIncident.get(), event);
         } else {
-            log.warn("🚨 DETECTADO SPIKE DE ERRORES HTTP - Creando Incidente.");
+            log.warn("🚨 HTTP ERROR SPIKE DETECTED - Creating Incident.");
             // Empieza como MEDIUM, si sube mucho el contador podría pasar a HIGH (mejora futura)
             createIncident(IncidentType.HTTP_ERROR_SPIKE, IncidentSeverity.MEDIUM, event);
         }
@@ -109,6 +109,6 @@ public class IncidentService {
         }
 
         incidentRepository.save(incident);
-        log.info("Incidente {} actualizado. Eventos acumulados: {}", incident.getId(), incident.getEventCount());
+        log.info(" Incident {} updated. Accumulated events: {}", incident.getId(), incident.getEventCount());
     }
 }
