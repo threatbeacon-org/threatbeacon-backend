@@ -20,7 +20,7 @@ public class RiskService {
 
 
 
-        // This method will return the real RiskStatusDto in Sprint 2.
-        throw new UnsupportedOperationException("RiskService logic not yet implemented. Use RiskController for testing in S1.");
+        // This method will return the real RiskStatusDto in Sprint 2..
+        throw new UnsupportedOperationException("RiskService logic not yet implemented. Use RiskController for testing in S1..");
     }
 }

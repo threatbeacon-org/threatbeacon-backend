@@ -15,5 +15,5 @@ public interface RiskMapper {
 
     @Mapping(target = "level", source = "level")
     RiskStatusDto toDto(RiskStatus riskStatus);
-}
+};
 
