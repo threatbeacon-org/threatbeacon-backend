@@ -16,10 +16,7 @@ public class RiskService {
      * Calculates the current global risk status.
      * Temporary stub method for Sprint 1.
      */
-    public RiskStatusDto calculateRiskStatus(boolean isMuted) {
-
-
-
+    public RiskStatusDto calculateRiskStatus() {
         // This method will return the real RiskStatusDto in Sprint 2.
         throw new UnsupportedOperationException("RiskService logic not yet implemented. Use RiskController for testing in S1.");
     }

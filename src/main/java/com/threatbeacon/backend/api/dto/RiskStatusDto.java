@@ -1,7 +1,6 @@
 package com.threatbeacon.backend.api.dto;
 
 import com.threatbeacon.backend.risk.RiskLevel;
-import com.threatbeacon.backend.risk.RiskStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,7 +8,7 @@ import java.time.ZonedDateTime;
 
 @Getter
 @Builder
-public class RiskStatusDto extends RiskStatus {
+public class RiskStatusDto {
 
     /**
      * The current global risk level (NORMAL, SUSPICIOUS, CRITICAL).
