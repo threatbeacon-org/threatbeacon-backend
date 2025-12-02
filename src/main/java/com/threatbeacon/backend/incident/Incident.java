@@ -37,14 +37,14 @@ public class Incident{
     @Column(name = "event_count")
     private Integer eventCount;
 
-    // Esto por el momento lo vamos aguardar en "CVS"(Comma Separated Values) en texto
+    // For now, we're going to save this as "CSV" (Comma Separated Values) text.eparated Values) en texto
     @Column(name = "main_ips", columnDefinition = "TEXT")
     private String mainIps;
 
     @Column(name = "countries", columnDefinition = "TEXT")
     private String countries;
 
-    //Hook de JPA para asignar fechas automáticamnete antes de insertar
+    //JPA hook to automatically assign dates before inserting
     @PrePersist
     protected void onCreate(){
         if (createdAt == null) createdAt = Instant.now();
@@ -53,7 +53,7 @@ public class Incident{
         if (status == null) status = IncidentStatus.OPEN;
     }
 
-    //Hook para actualizar fecha al editar
+    // Hook to update date when editing
     @PreUpdate
     protected void onUpdate(){
         updatedAt = Instant.now();

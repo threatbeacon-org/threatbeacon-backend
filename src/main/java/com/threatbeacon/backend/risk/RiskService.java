@@ -1,24 +1,31 @@
 package com.threatbeacon.backend.risk;
 
-import com.threatbeacon.backend.api.dto.RiskStatusDto;
+// We import the DOMAIN object, not the DTO
+import java.time.ZonedDateTime;
+
 import org.springframework.stereotype.Service;
 
-/**
- * Core service responsible for calculating the global risk level based on active incidents.
- * NOTE: In Sprint 1, this class is just a placeholder (stub). The real logic is implemented in T2.4.3.
- */
 @Service
 public class RiskService {
 
-    // The real implementation will receive dependencies (IncidentRepository, BeaconStateService)
+    // Actual dependencies (Repositories) will be injected here in Sprint 2
 
     /**
-     * Calculates the current global risk status.
-     * Temporary stub method for Sprint 1.
+     * Calculates global risk status.
+     * * FIX: Now returns 'RiskStatus' (Domain) instead of 'RiskStatusDto'.
+     * This allows the Controller to use the Mapper correctly.
      */
-    public RiskStatusDto calculateRiskStatus(boolean isMuted) {
+    public RiskStatus calculateRiskStatus(boolean buzzerMuted) {
+        // Temporal logic for Sprint 1 (Simulation)
+        // If muted -> NORMAL (Green)
+        // If not muted -> SUSPICIOUS (Orange) - To test what changes
+        RiskLevel level = buzzerMuted ? RiskLevel.NORMAL : RiskLevel.SUSPICIOUS;
 
-        // This method will return the real RiskStatusDto in Sprint 2.
-        throw new UnsupportedOperationException("RiskService logic not yet implemented. Use RiskController for testing in S1.");
+        // Return the domain object
+        return new RiskStatus(
+                level,
+                buzzerMuted,
+                ZonedDateTime.now()
+        );
     }
 }
