@@ -23,9 +23,8 @@ public class RiskController {
     @GetMapping
     public ResponseEntity<RiskStatusDto> getGlobalRiskStatus() {
         boolean isMuted = beaconStateService.getBeaconState().isBuzzerMuted();
-        RiskStatus riskStatus = riskService.calculateRiskStatus(isMuted);
-        RiskStatusDto dto = riskMapper.toDto(riskStatus);
-        return ResponseEntity.ok(dto);
+        RiskStatusDto riskStatusDto = riskService.calculateRiskStatus(isMuted);
+        return ResponseEntity.ok(riskStatusDto);
     }
 }
 
