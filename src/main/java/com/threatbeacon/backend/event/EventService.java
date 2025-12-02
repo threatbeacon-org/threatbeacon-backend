@@ -65,8 +65,7 @@ public class EventService {
         event.setCountry(dto.getCountry());
         event.setSeverity(dto.getSeverity());
         event.setMetadata(dto.getMetadata());
-
-        event.getTimestamp(OffsetDateTime.now());
+        event.setTimestamp(OffsetDateTime.now());
 
         return event;
     }

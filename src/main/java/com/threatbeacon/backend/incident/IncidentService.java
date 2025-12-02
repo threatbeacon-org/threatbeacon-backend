@@ -25,7 +25,7 @@ public class IncidentService {
      */
     @Transactional
     public void proccesNewEvent(Event event){
-        log.debug("Analyzing events to detect potential incidents: type{}, ip{}", event.getType(), event.getIp());
+        log.debug("Analyzing events to detect potential incidents: type {}, ip {}", event.getType(), event.getIp());
 
         // Rule 1: Brute force detection
         if ("LOGIN_FAILED".equals(event.getType())){
@@ -49,7 +49,7 @@ public class IncidentService {
             updateExistingIncident(existingIncident.get(), event);
         } else {
             // If it DOES NOT EXIST, we create one immediately
-            log.warn("BRUTE FORCE ATTACK DETECTED - creating Incident. IP{}", event.getIp());
+            log.warn("BRUTE FORCE ATTACK DETECTED - creating Incident. IP {}", event.getIp());
             createIncident(IncidentType.BRUTE_FORCE_LOGIN, IncidentSeverity.HIGH, event);
         }
     }

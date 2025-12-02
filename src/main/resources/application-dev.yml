@@ -1,18 +1,18 @@
-# src/main/resources/application-dev.yml
-
 spring:
   datasource:
-    # Use H2 in-memory database
-    url: jdbc:h2:mem:threatbeacon
+    # IMPORTANTE: ;MODE=PostgreSQL le enseña a H2 a entender tipos de Postgres.
+    # DB_CLOSE_DELAY=-1 evita que la BD se borre inesperadamente.
+    url: jdbc:h2:mem:threatbeacon;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
     username: sa
     password: password
   jpa:
-    # Drop and recreate schema on every start (only for quick local dev)
     hibernate:
       ddl-auto: create-drop
-    # Show SQL queries in the console for debugging
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
   h2:
     console:
-      enabled: true # Enable H2 console for quick DB inspection (access via http://localhost:8080/h2-console)
+      enabled: true
