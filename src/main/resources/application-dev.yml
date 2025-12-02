@@ -1,7 +1,7 @@
 spring:
   datasource:
-    # IMPORTANTE: ;MODE=PostgreSQL le enseña a H2 a entender tipos de Postgres.
-    # DB_CLOSE_DELAY=-1 evita que la BD se borre inesperadamente.
+    # IMPORTANT: ;MODE=PostgreSQL teaches H2 to understand Postgres types.
+    # DB_CLOSE_DELAY=-1 prevents the DB from being deleted unexpectedly.
     url: jdbc:h2:mem:threatbeacon;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
     driver-class-name: org.h2.Driver
     username: sa

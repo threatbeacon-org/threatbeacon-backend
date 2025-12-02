@@ -32,7 +32,7 @@ public class EventService {
         // Map DTO to Entity
         Event event = mapDtoToEntity(dto);
 
-        // Persist
+        // Persist.
         Event savedEvent = eventRepository.save(event);
 
         logger.info("Event saved successfully with ID: {}", savedEvent.getId());

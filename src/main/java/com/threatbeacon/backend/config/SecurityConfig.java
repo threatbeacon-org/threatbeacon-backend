@@ -35,7 +35,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User.withUsername("soc-demo")
-                .password("{noop}demo123!") // {noop} indica que la contraseña no está encriptada (solo para dev)
+                .password("{noop}demo123!") // {noop} indicates that the password is not encrypted (dev only)
                 .roles("USER")
                 .build();
 

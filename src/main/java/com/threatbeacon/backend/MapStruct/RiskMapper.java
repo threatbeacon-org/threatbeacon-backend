@@ -5,8 +5,8 @@ import com.threatbeacon.backend.risk.RiskStatus;
 import org.springframework.stereotype.Component;
 
 /**
- * Mapper manual para convertir Entidades de Dominio a DTOs.
- * Reemplaza a MapStruct temporalmente para evitar problemas de compilación en el MVP.
+ * Manual Mapper to convert Domain Entities to DTOs.
+ * Replaces MapStruct temporarily to avoid compilation issues in the MVP.
  */
 @Component
 public class RiskMapper {

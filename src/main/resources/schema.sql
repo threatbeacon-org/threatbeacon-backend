@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS events (
     ip           VARCHAR(45)   NULL,
     country      VARCHAR(5)    NULL,
     severity     VARCHAR(20)   NOT NULL,
-    -- CAMBIO: Usamos el estándar SQL en lugar de la abreviatura de Postgres
     timestamp    TIMESTAMP WITH TIME ZONE NOT NULL,
     metadata     TEXT          NULL
 );
@@ -22,7 +21,7 @@ CREATE TABLE IF NOT EXISTS incidents (
     type         VARCHAR(50)   NOT NULL,
     severity     VARCHAR(20)   NOT NULL,
     status       VARCHAR(20)   NOT NULL,
-    -- CAMBIO: Usamos el estándar SQL
+    -- CAMBIO: Usamos el estándar SQL.
     created_at   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     updated_at   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     event_count  INT           DEFAULT 0,
@@ -40,7 +39,7 @@ CREATE TABLE IF NOT EXISTS beacon_state (
 );
 
 -- 4. Seed Data (Universal SQL)
--- Inserta la fila inicial solo si no existe. Funciona en H2 y Postgres.
+-- Insert the initial row only if it does not exist. Works on H2 and Postgres.
 INSERT INTO beacon_state (id, buzzer_muted, updated_at)
 SELECT 1, FALSE, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM beacon_state WHERE id = 1);
