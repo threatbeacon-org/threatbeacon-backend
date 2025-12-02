@@ -21,6 +21,6 @@ public class EventDto {
     @NotBlank(message = "Severity is required")
     private String severity;  // LOW, MEDIUM, HIGH
 
-    private String metadata;  // "user=admin"
+    private String metadata;  // "user=soc-demo"
 
 }

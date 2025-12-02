@@ -2,14 +2,21 @@ package com.threatbeacon.backend.MapStruct;
 
 import com.threatbeacon.backend.api.dto.RiskStatusDto;
 import com.threatbeacon.backend.risk.RiskStatus;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
 
 @Mapper(componentModel = "spring")
 public interface RiskMapper {
 
-    @Mapping(target = "level", source = "level")
-    RiskStatusDto toDto(RiskStatus riskStatus);
-}
+    public RiskStatusDto toDto(RiskStatus riskStatus) {
+        if (riskStatus == null) {
+            return null;
+        }
 
+        return RiskStatusDto.builder()
+                .level(riskStatus.getLevel())
+                .buzzerMuted(riskStatus.isBuzzerMuted())
+                .updatedAt(riskStatus.getUpdatedAt())
+                .build();
+    }
+}

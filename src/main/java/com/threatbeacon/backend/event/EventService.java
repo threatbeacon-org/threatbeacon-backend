@@ -32,7 +32,7 @@ public class EventService {
         // Map DTO to Entity
         Event event = mapDtoToEntity(dto);
 
-        // Persist
+        // Persist.
         Event savedEvent = eventRepository.save(event);
 
         logger.info("Event saved successfully with ID: {}", savedEvent.getId());
@@ -65,8 +65,7 @@ public class EventService {
         event.setCountry(dto.getCountry());
         event.setSeverity(dto.getSeverity());
         event.setMetadata(dto.getMetadata());
-
-        event.getTimestamp(OffsetDateTime.now());
+        event.setTimestamp(OffsetDateTime.now());
 
         return event;
     }
