@@ -1,6 +1,6 @@
 package com.threatbeacon.backend.beacon.command;
 
-//
+//update temp
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

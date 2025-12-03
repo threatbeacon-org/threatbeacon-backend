@@ -10,10 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface RiskMapper {
 
-    /**
-     * Mapear RiskStatus -> RiskStatusDto
-     * Asignamos updatedAt = timestamp para que el DTO tenga ambos campos coherentes.
-     */
+  //mapping...
     @Mapping(target = "updatedAt", source = "timestamp")
     RiskStatusDto toDto(RiskStatus riskStatus);
 }

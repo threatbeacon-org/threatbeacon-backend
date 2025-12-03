@@ -53,7 +53,7 @@ public class RiskService {
     }
 
 //High-level service: update mute state and recompute risk.
-    //Adaped for extensibility while maintaining controller logic.
+    //Adaped for extensibility while maintaining controller logic...
 
 
     public RiskStatus updateMuteAndRecalculateRisk(Boolean newMutedState) {

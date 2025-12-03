@@ -28,7 +28,7 @@ public class RiskController {
     //This endpoint retrieves the current global risk status of the system.
     //It works by first checking whether the beacon's buzzer is muted, using BeaconStateService.
     //That muted state is then passed to RiskService, which calculates the appropriate risk level based on the system’s rules.
-    //The resulting RiskStatus domain object is finally converted into a RiskStatusDto through RiskMapper, and the controller returns it as the API response.
+    //The resulting RiskStatus domain object is finally converted into a RiskStatusDto through RiskMapper, and the controller returns it as the API response...
 
     @GetMapping
     public ResponseEntity<RiskStatusDto> getGlobalRiskStatus() {
