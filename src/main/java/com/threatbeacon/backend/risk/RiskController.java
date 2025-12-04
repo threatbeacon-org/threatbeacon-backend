@@ -31,9 +31,9 @@ public class RiskController {
     //The resulting RiskStatus domain object is finally converted into a RiskStatusDto through RiskMapper, and the controller returns it as the API response...
 
     @GetMapping
-    public ResponseEntity<RiskStatusDto> getGlobalRiskStatus() {
+    public ResponseEntity<RiskStatus> getGlobalRiskStatus() {
         boolean isMuted = beaconStateService.getBeaconState().isBuzzerMuted();
-        RiskStatusDto riskStatusDto = riskService.calculateRiskStatus(isMuted);
+        RiskStatus riskStatusDto = riskService.calculateRiskStatus(isMuted);
         return ResponseEntity.ok(riskStatusDto);
     }
 
