@@ -2,17 +2,19 @@ package com.threatbeacon.backend.risk;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
-//Update: Aall
-//Connection with Mapper and Controller
+
+//Connection with Mapper and Controller...
 
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class RiskStatus {
     private RiskLevel level;
     private boolean buzzerMuted;
-    private ZonedDateTime updatedAt;
+    private ZonedDateTime timestamp;
 }
 

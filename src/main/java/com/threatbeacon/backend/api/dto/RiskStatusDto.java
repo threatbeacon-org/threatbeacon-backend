@@ -2,27 +2,19 @@ package com.threatbeacon.backend.api.dto;
 
 import com.threatbeacon.backend.risk.RiskLevel;
 import lombok.Builder;
-import lombok.Getter;
-
 import java.time.ZonedDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RiskStatusDto {
 
-    /**
-     * The current global risk level (NORMAL, SUSPICIOUS, CRITICAL).
-     */
-    private final RiskLevel level;
-
-    /**
-     * Flag indicating whether the physical buzzer is currently muted by an analyst.
-     * The beacon must check this flag.
-     */
-    private final boolean buzzerMuted;
-
-    /**
-     * Timestamp of the last time the risk status was calculated or updated.
-     */
-    private final ZonedDateTime updatedAt;
+    private RiskLevel level;
+    private boolean buzzerMuted;
+    private ZonedDateTime timestamp;
+    private ZonedDateTime updatedAt; //OPTIONAL
 }
