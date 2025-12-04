@@ -9,10 +9,10 @@ import java.util.Optional;
 @Repository
 public interface IncidentRepository extends JpaRepository<Incident, Long> {
 
-    // Necesitaremos buscar incidentes abiertos para ver si actualizamos uno existente
+    // We'll need to search for open incidents to see if we can update an existing one.
     // SELECT * FROM incidents WHERE status = 'OPEN' AND type = ?
     Optional<Incident> findFirstByStatusAndType(IncidentStatus status, IncidentType type);
 
-    // Para el dashboard (Overview)
+    // For the dashboard (Overview)
     List<Incident> findByStatusOrderByUpdatedAtDesc(IncidentStatus status);
 }
