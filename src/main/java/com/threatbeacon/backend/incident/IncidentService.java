@@ -15,6 +15,7 @@ public class IncidentService {
 
     private static final Logger log = LoggerFactory.getLogger(IncidentService.class);
     private final IncidentRepository incidentRepository;
+    private static final int HTTP_SPIKE_ESCALATION_THRESHOLD = 50;
 
     public IncidentService(IncidentRepository incidentRepository) {
         this.incidentRepository = incidentRepository;
@@ -25,7 +26,7 @@ public class IncidentService {
      */
     @Transactional
     public void processNewEvent(Event event){
-        log.debug("Analyzing events to detect potential incidents: type {}, ip {}", event.getType(), event.getIp());
+        log.debug("Analyzing event: type={}, ip={}", event.getType(), event.getIp());;
 
         // Rule 1: Brute force detection
         if ("LOGIN_FAILED".equals(event.getType())){
@@ -61,7 +62,7 @@ public class IncidentService {
         if (existingIncident.isPresent()) {
             updateExistingIncident(existingIncident.get(), event);
         } else {
-            log.warn("🚨 HTTP ERROR SPIKE DETECTED - Creating Incident.");
+            log.warn("HTTP ERROR SPIKE DETECTED - Creating Incident.");
             // Empieza como MEDIUM, si sube mucho el contador podría pasar a HIGH (mejora futura)
             createIncident(IncidentType.HTTP_ERROR_SPIKE, IncidentSeverity.MEDIUM, event);
         }
@@ -83,32 +84,40 @@ public class IncidentService {
     }
 
     private void updateExistingIncident(Incident incident, Event event) {
-        // 1. Increment counter
+        // 1. Increment event counter
         incident.setEventCount(incident.getEventCount() + 1);
         incident.setUpdatedAt(Instant.now());
 
-        // 2. Add IP address if it is new and not already on the list (Simple CSV logic)
+        // 2. Dynamic Severity Escalation
+        // If an HTTP Spike grows too large, it becomes a Critical/High issue.
+        if (incident.getType() == IncidentType.HTTP_ERROR_SPIKE &&
+                incident.getSeverity() == IncidentSeverity.MEDIUM &&
+                incident.getEventCount() > HTTP_SPIKE_ESCALATION_THRESHOLD) {
+
+            log.warn("ESCALATING Incident {} to HIGH severity (Count > {})",
+                    incident.getId(), HTTP_SPIKE_ESCALATION_THRESHOLD);
+            incident.setSeverity(IncidentSeverity.HIGH);
+        }
+
+        // 3. Append unique IPs (Simple CSV logic for MVP)
         String currentIps = incident.getMainIps();
         String newIp = event.getIp();
-
         if (currentIps != null && newIp != null && !currentIps.contains(newIp)) {
-            // We concatenate: "1.1.1.1, 2.2.2.2"
-            incident.setMainIps(currentIps + ", " + newIp);
+            incident.setMainIps(currentIps + "," + newIp);
         } else if (currentIps == null) {
             incident.setMainIps(newIp);
         }
 
-        // 3. Add Country if it's new
+        // 4. Append unique Countries
         String currentCountries = incident.getCountries();
         String newCountry = event.getCountry();
-
         if (currentCountries != null && newCountry != null && !currentCountries.contains(newCountry)) {
-            incident.setCountries(currentCountries + ", " + newCountry);
+            incident.setCountries(currentCountries + "," + newCountry);
         } else if (currentCountries == null) {
             incident.setCountries(newCountry);
         }
 
         incidentRepository.save(incident);
-        log.info(" Incident {} updated. Accumulated events: {}", incident.getId(), incident.getEventCount());
+        log.info("Incident {} updated. Count: {}", incident.getId(), incident.getEventCount());
     }
 }
