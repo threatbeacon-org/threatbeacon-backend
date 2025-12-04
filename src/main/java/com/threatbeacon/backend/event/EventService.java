@@ -38,7 +38,7 @@ public class EventService {
         logger.info("Event saved successfully with ID: {}", savedEvent.getId());
 
         try {
-            incidentService.proccesNewEvent(savedEvent);
+            incidentService.processNewEvent(savedEvent);
         } catch (Exception e) {
             logger.error("Error processing incident rules fro event {}: {}", savedEvent.getId(), e.getMessage());
         }

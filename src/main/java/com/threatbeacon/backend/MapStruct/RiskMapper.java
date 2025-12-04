@@ -2,6 +2,8 @@ package com.threatbeacon.backend.MapStruct;
 
 import com.threatbeacon.backend.api.dto.RiskStatusDto;
 import com.threatbeacon.backend.risk.RiskStatus;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.stereotype.Component;
 
 
