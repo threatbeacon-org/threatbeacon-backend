@@ -4,7 +4,12 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "events")
+@Table(name = "events", indexes = {
+        @Index(name = "idx_timestamp", columnList = "timestamp"),
+        @Index(name = "idx_severity", columnList = "severity"),
+        @Index(name = "idx_type", columnList = "type"),
+        @Index(name = "idx_type_timestamp", columnList = "type, timestamp")  // Composite index para queries comunes
+})
 public class Event {
 
     @Id
@@ -96,7 +101,8 @@ public class Event {
         this.severity = severity;
     }
 
-    public OffsetDateTime getTimestamp(OffsetDateTime now) {
+    // ✅ CORREGIDO: Se eliminó el parámetro innecesario
+    public OffsetDateTime getTimestamp() {
         return timestamp;
     }
 
