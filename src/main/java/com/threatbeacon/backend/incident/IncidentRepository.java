@@ -15,4 +15,7 @@ public interface IncidentRepository extends JpaRepository<Incident, Long> {
 
     // For the dashboard (Overview)
     List<Incident> findByStatusOrderByUpdatedAtDesc(IncidentStatus status);
+
+    // For RiskService to get all active incidents
+    List<Incident> findAllByStatus(IncidentStatus status);
 }

@@ -1,47 +1,38 @@
 package com.threatbeacon.backend.risk;
 
 import com.threatbeacon.backend.beacon.BeaconStateService;
+import com.threatbeacon.backend.incident.Incident;
+import com.threatbeacon.backend.incident.IncidentRepository;
+import com.threatbeacon.backend.incident.IncidentSeverity;
+import com.threatbeacon.backend.incident.IncidentStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
-/**
- * Service responsible for calculating and managing the system's risk status.
-
- * What it does:
- * - Calculates the risk level based on whether the buzzer is muted.
- * - Updates the buzzer mute state and recalculates risk.
- * - Retrieves the current risk status from the beacon state.
-
- * What it contains:
- * - A reference to BeaconStateService for reading and updating the beacon state.
- * - Logging for debugging, warnings, and operational visibility.
- * - Methods to calculate, update, and fetch risk status.
-
- * What it needs:
- * - A working implementation of BeaconStateService.
- * - The RiskLevel enum and RiskStatus model.
- * - Spring Boot dependency injection (@Service, @RequiredArgsConstructor).
- * - System clock access to generate timestamps (ZonedDateTime.now()).
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RiskService {
 
     private final BeaconStateService beaconStateService;
+    private final IncidentRepository incidentRepository;
 
-//Core function used by the controller to compute risk level
-    //based solely on mute state (for now)
     public RiskStatus calculateRiskStatus(Boolean buzzerMuted) {
         if (buzzerMuted == null) {
             log.warn("Null buzzerMuted received -> fallback to NON muted state.");
             buzzerMuted = false;
         }
 
-        RiskLevel level = buzzerMuted ? RiskLevel.NORMAL : RiskLevel.SUSPICIOUS;
+        List<Incident> activeIncidents = incidentRepository.findAllByStatus(IncidentStatus.OPEN);
+        RiskLevel level = calculateRiskLevel(activeIncidents);
+
+        if (level == RiskLevel.NORMAL) {
+            beaconStateService.setBuzzerMuted(false);
+            buzzerMuted = false;
+        }
 
         log.info("Risk calculated | level: {}, buzzerMuted: {}", level, buzzerMuted);
 
@@ -52,9 +43,20 @@ public class RiskService {
         );
     }
 
-//High-level service: update mute state and recompute risk.
-    //Adaped for extensibility while maintaining controller logic...
+    private RiskLevel calculateRiskLevel(List<Incident> activeIncidents) {
+        if (activeIncidents.isEmpty()) {
+            return RiskLevel.NORMAL;
+        }
 
+        boolean hasHighOrCritical = activeIncidents.stream()
+                .anyMatch(incident -> incident.getSeverity() == IncidentSeverity.HIGH || incident.getSeverity() == IncidentSeverity.CRITICAL);
+
+        if (hasHighOrCritical) {
+            return RiskLevel.CRITICAL;
+        }
+
+        return RiskLevel.SUSPICIOUS;
+    }
 
     public RiskStatus updateMuteAndRecalculateRisk(Boolean newMutedState) {
         if (newMutedState == null) {
@@ -72,7 +74,6 @@ public class RiskService {
         return calculateRiskStatus(newMutedState);
     }
 
-//Convenience method to retrieve current state of the system risk.
     public RiskStatus getCurrentRiskStatus() {
         boolean currentMuted = beaconStateService.getBeaconState().isBuzzerMuted();
         return calculateRiskStatus(currentMuted);
