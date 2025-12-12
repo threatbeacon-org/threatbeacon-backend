@@ -16,5 +16,5 @@ public class RiskStatusDto {
     private RiskLevel level;
     private boolean buzzerMuted;
     private ZonedDateTime timestamp;
-    private ZonedDateTime updatedAt; //OPTIONAL
+    private ZonedDateTime updatedAt;
 }

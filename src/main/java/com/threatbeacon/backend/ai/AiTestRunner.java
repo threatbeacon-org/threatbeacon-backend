@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Profile;
 public class AiTestRunner {
 
     @Bean
-    @Profile("!test") // Ensure this does not run during unit tests
-    public CommandLineRunner testAi(OpenAiChatModel chatModel) { // <-- Inyectamos el bean correcto: OpenAiChatModel
+    @Profile("!test")
+    public CommandLineRunner testAi(OpenAiChatModel chatModel) {
         return args -> {
             try {
                 System.out.println("==================================================");

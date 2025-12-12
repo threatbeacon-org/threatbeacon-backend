@@ -30,10 +30,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) { // <-- Inyecta el PasswordEncoder
+    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.builder()
                 .username("soc-demo")
-                .password(passwordEncoder.encode("demo123!")) // <-- Usa la instancia inyectada
+                .password(passwordEncoder.encode("demo123!"))
                 .roles("USER")
                 .build();
         return new InMemoryUserDetailsManager(user);
