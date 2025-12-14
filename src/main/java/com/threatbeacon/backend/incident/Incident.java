@@ -5,7 +5,9 @@ import lombok.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "incidents")
+@Table(name = "incidents", indexes = {
+        @Index(name = "idx_incident_status_updated", columnList = "status, updatedAt")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
