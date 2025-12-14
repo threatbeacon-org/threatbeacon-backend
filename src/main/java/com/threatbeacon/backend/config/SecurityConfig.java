@@ -2,9 +2,9 @@ package com.threatbeacon.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,19 +20,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http //(I only changed this block, up to before the return)
-                .cors(withDefaults()) // Enable CORS configuration
+        http
+                // Disable CSRF protection as we are building a stateless API
                 .csrf(csrf -> csrf.disable())
+                // Set session management to stateless
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Define authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/events").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/beacon/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/beacon/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/**").authenticated() // Secure all API endpoints
+                        .anyRequest().permitAll() // Allow other non-API requests
                 )
+                // Enable HTTP Basic authentication
                 .httpBasic(withDefaults());
-
         return http.build();
     }
 

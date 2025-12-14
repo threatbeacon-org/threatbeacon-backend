@@ -37,12 +37,11 @@ public class EventService {
 
         logger.info("Event saved successfully with ID: {}", savedEvent.getId());
 
-        // try {
-        //     // TEMPORARILY COMMENTED OUT FOR DEBUGGING
-        //     // incidentService.processNewEvent(savedEvent);
-        // } catch (Exception e) {
-        //     logger.error("Error processing incident rules for event {}: {}", savedEvent.getId(), e.getMessage());
-        // }
+        try {
+            incidentService.processNewEvent(savedEvent);
+        } catch (Exception e) {
+            logger.error("Error processing incident rules for event {}: {}", savedEvent.getId(), e.getMessage());
+        }
         return savedEvent;
     }
 
