@@ -41,4 +41,8 @@ public class BeaconStateService {
         state.setUpdatedAt(ZonedDateTime.now());
         return beaconStateRepository.save(state);
     }
+
+    public boolean isBuzzerMuted() {
+        return getBeaconState().isBuzzerMuted();
+    }
 }
