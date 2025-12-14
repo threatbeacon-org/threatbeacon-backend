@@ -12,7 +12,7 @@ import java.util.List;
 public class CorsConfig {
 
     private static final String FRONTEND_ORIGIN =
-            "https://threatbeacon.vercel.app/";
+            "https://threat-eight.vercel.app/";
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
