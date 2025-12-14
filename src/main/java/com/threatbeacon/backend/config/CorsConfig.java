@@ -11,6 +11,7 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
+    // config ruta
     private static final String FRONTEND_ORIGIN =
             "https://threat-eight.vercel.app/";
 
