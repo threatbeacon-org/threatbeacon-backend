@@ -3,6 +3,8 @@ package com.threatbeacon.backend.incident;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +16,11 @@ public interface IncidentRepository extends JpaRepository<Incident, Long> {
     Optional<Incident> findFirstByStatusAndType(IncidentStatus status, IncidentType type);
 
     // For the dashboard (Overview)
-    List<Incident> findByStatusOrderByUpdatedAtDesc(IncidentStatus status);
+    List<Incident> findByStatusAndUpdatedAtBefore(IncidentStatus status, Instant cutoffDate);
 
     // For RiskService to get all active incidents
     List<Incident> findAllByStatus(IncidentStatus status);
+
+    // Para saber si queda algo pendiente (para el buzzer)
+    boolean existsByStatus(IncidentStatus status);
 }
