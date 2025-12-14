@@ -40,7 +40,7 @@ public class EventService {
         try {
             incidentService.processNewEvent(savedEvent);
         } catch (Exception e) {
-            logger.error("Error processing incident rules fro event {}: {}", savedEvent.getId(), e.getMessage());
+            logger.error("Error processing incident rules for event {}: {}", savedEvent.getId(), e.getMessage());
         }
         return savedEvent;
     }
