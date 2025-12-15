@@ -3,7 +3,7 @@
 spring:
   # Sets the default profile to 'dev' if none is explicitly specified (e.g., via command line)
   profiles:
-    active: dev
+    active: prod
 
 server:
   port: 8080 # Default port for the API
