@@ -15,12 +15,17 @@ public class CorsConfig {
     private static final String FRONTEND_ORIGIN =
             "https://threat-eight.vercel.app/";
 
+    private static final String FRONTEND_ORIGINs =
+            "http://localhost:3000";
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(FRONTEND_ORIGIN));
+        configuration.setAllowedOrigins(List.of(FRONTEND_ORIGINs));
+
 
         configuration.setAllowedMethods(List.of(
                 "GET",
