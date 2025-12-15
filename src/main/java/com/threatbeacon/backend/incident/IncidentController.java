@@ -16,26 +16,23 @@ import java.util.Map;
 public class IncidentController {
 
     private final IncidentInsightService insightService;
-    private final IncidentRepository incidentRepository; // <--- Nueva dependencia
+    private final IncidentRepository incidentRepository;
 
-    // Actualizamos el constructor para inyectar el repositorio
+
     public IncidentController(IncidentInsightService insightService, IncidentRepository incidentRepository) {
         this.insightService = insightService;
         this.incidentRepository = incidentRepository;
     }
 
-    // --- NUEVO: Listar todos los incidentes (Para la tabla del Dashboard) ---
     @GetMapping
     public List<Incident> getAllIncidents() {
         return incidentRepository.findAll(Sort.by(Sort.Direction.DESC, "updatedAt"));
     }
 
-    // --- NUEVO: Detalle de un incidente (Para la vista individual) ---
     @GetMapping("/{id}")
     public ResponseEntity<Object> getIncidentDetail(@PathVariable Long id) {
         return incidentRepository.findById(id)
                 .map(incident -> {
-                    // Mapeo manual para convertir los CSVs a Arrays para el Frontend
                     Map<String, Object> response = new HashMap<>();
                     response.put("id", incident.getId());
                     response.put("type", incident.getType());
@@ -45,7 +42,6 @@ public class IncidentController {
                     response.put("updatedAt", incident.getUpdatedAt());
                     response.put("eventCount", incident.getEventCount());
 
-                    // Conversión clave: String "1.1.1.1,2.2.2.2" -> Array ["1.1.1.1", "2.2.2.2"]
                     response.put("mainIps", incident.getMainIps() != null && !incident.getMainIps().isEmpty()
                             ? Arrays.asList(incident.getMainIps().split(","))
                             : List.of());
