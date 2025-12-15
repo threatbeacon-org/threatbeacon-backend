@@ -84,6 +84,14 @@ src/main/java/com/threatbeacon/backend
 └── ThreatBeaconBackendApplication.java
 ```
 ## Diagrams
+#### UML Class Diagram
+![WhatsApp Image 2025-12-14 at 9 16 13 PM](https://github.com/user-attachments/assets/6e981fa7-349a-4106-a102-9133b5ce9bd6)
+
+#### Database Diagram
+![WhatsApp Image 2025-12-14 at 9 20 17 PM](https://github.com/user-attachments/assets/4210b3a3-bfa1-4c3f-af8c-9eecf9512391)
+
+#### Architecture Diagram
+![WhatsApp Image 2025-12-14 at 9 20 40 PM](https://github.com/user-attachments/assets/7242a0cd-9807-4194-969d-acf174d69b2f)
 ---
 
 ## ⚙️ Core System Logic
