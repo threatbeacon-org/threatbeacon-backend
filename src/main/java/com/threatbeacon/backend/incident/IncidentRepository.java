@@ -21,6 +21,5 @@ public interface IncidentRepository extends JpaRepository<Incident, Long> {
     // For RiskService to get all active incidents
     List<Incident> findAllByStatus(IncidentStatus status);
 
-    // Para saber si queda algo pendiente (para el buzzer)
     boolean existsByStatus(IncidentStatus status);
 }
