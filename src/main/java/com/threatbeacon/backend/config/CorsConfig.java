@@ -13,10 +13,7 @@ public class CorsConfig {
 
     // config ruta
     private static final String FRONTEND_ORIGIN =
-            "https://threat-eight.vercel.app/";
-
-    private static final String FRONTEND_ORIGINs =
-            "http://localhost:3000";
+            "https://threatbeacon.vercel.app/";
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -24,8 +21,6 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of(FRONTEND_ORIGIN));
-        configuration.setAllowedOrigins(List.of(FRONTEND_ORIGINs));
-
 
         configuration.setAllowedMethods(List.of(
                 "GET",
