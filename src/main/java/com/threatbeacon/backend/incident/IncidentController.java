@@ -59,6 +59,7 @@ public class IncidentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // endpont all incidents
     @GetMapping("/{id}/insight")
     public IncidentInsightDto getIncidentInsight(@PathVariable Long id) {
         return insightService.generateInsight(id);
