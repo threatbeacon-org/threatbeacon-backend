@@ -1,15 +1,17 @@
 package com.threatbeacon.backend.ai;
 
-import com.threatbeacon.backend.api.dto.IncidentInsightDto; // <-- Updated import path
+import com.threatbeacon.backend.api.dto.IncidentInsightDto;
 import com.threatbeacon.backend.incident.Incident;
 import com.threatbeacon.backend.incident.IncidentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.model.ChatResponse; // Importante
+import org.springframework.ai.chat.prompt.Prompt; // Importante
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions; // Importante para configurar opciones
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Optional;
 
 @Service
@@ -30,17 +32,27 @@ public class IncidentInsightService {
         }
 
         Incident incident = incidentOpt.get();
-        String prompt = buildPrompt(incident);
+        String promptText = buildPrompt(incident);
 
         try {
             log.info("Generating AI insight for incident ID: {}", incidentId);
-            String insight = chatModel.call(prompt);
+
+            OpenAiChatOptions options = OpenAiChatOptions.builder()
+                    .withTemperature(0.4f)
+                    .withMaxTokens(600)
+                    .build();
+
+            Prompt prompt = new Prompt(promptText, options);
+
+            ChatResponse response = chatModel.call(prompt);
+
+            String insight = response.getResult().getOutput().getContent();
+
             log.info("Successfully generated AI insight for incident ID: {}", incidentId);
             return new IncidentInsightDto(incidentId, insight);
+
         } catch (Exception e) {
-            // Log the error for debugging, without exposing secrets in the response
             log.error("Failed to generate AI insight for incident ID: {}. Error: {}", incidentId, e.getMessage());
-            // Return the fallback DTO
             return new IncidentInsightDto(incidentId, FALLBACK_TEXT);
         }
     }
@@ -51,22 +63,34 @@ public class IncidentInsightService {
             durationMinutes = Duration.between(incident.getCreatedAt(), incident.getUpdatedAt()).toMinutes();
         }
 
+        // --- PROMPT "SENIOR SOC ANALYST" ---
         return String.format(
                 """
-                Generate a concise security incident report based on the following data:
+                Act as a Senior Tier 3 SOC Analyst. Analyze the following security incident telemetry and generate a high-priority incident response report.
+                
+                INCIDENT TELEMETRY:
                 - Incident Type: %s
                 - Severity: %s
                 - Status: %s
                 - Event Count: %d
-                - Main IPs Involved: %s
-                - Affected Countries: %s
-                - Incident Duration (minutes): %d
-
-                The report must be in English and contain two sections:
-                1.  **Summary:** A 2-3 line summary of the incident.
-                2.  **Recommendations:** 2-3 short, actionable recommendations for a security analyst.
-
-                Do not include any introductory or concluding phrases.
+                - Main Threat Actor IPs: %s
+                - Affected Geolocation: %s
+                - Duration: %d minutes
+                
+                RESPONSE REQUIREMENTS:
+                Provide a tactical report in strict Markdown format with the following three sections. Keep it concise, technical, and actionable.
+                
+                1. TACTICAL ANALYSIS
+                Identify the likely attack vector (e.g., Credential Stuffing, DDoS, SQLi) and the potential intent based on the severity and event count. Mention if this matches known patterns (e.g., MITRE ATT&CK).
+                
+                2. IMMEDIATE CONTAINMENT (The "Kill Switch")
+                List 3 specific, imperative commands or actions to stop the attack NOW.
+                (Example: "Block Subnet X on Firewall", "Revoke Session ID", "Isolate Host").
+                
+                3. REMEDIATION & HARDENING
+                Provide 2 brief recommendations to prevent recurrence (e.g., WAF rules, Rate Limiting adjustments).
+                
+                TONE: Professional, urgent, and direct. No filler words.
                 """,
                 incident.getType(),
                 incident.getSeverity(),
