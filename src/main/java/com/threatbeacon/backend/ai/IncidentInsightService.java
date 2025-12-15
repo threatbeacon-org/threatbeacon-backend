@@ -63,7 +63,7 @@ public class IncidentInsightService {
             durationMinutes = Duration.between(incident.getCreatedAt(), incident.getUpdatedAt()).toMinutes();
         }
 
-        // --- PROMPT "SENIOR SOC ANALYST" ---
+        // --- PROMPT "SENIOR SOC ANALYST" --
         return String.format(
                 """
                 Act as a Senior Tier 3 SOC Analyst. Analyze the following security incident telemetry and generate a high-priority incident response report.
