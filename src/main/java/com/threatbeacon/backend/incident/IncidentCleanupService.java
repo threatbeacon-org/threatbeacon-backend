@@ -19,7 +19,7 @@ public class IncidentCleanupService {
     private final BeaconStateService beaconStateService;
 
     // EXPIRATION TIME: 60 seconds without logs = end of the attack
-    private static final long ATTACK_TIMEOUT_SECONDS = 60;
+    private static final long ATTACK_TIMEOUT_SECONDS = 35;
 
     public IncidentCleanupService(IncidentRepository incidentRepository,
                                   BeaconStateService beaconStateService) {
